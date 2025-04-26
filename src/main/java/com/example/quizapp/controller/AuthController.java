@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/auth")
 public class AuthController {
     @Autowired
@@ -31,11 +32,9 @@ public class AuthController {
     }
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignupRequest signupRequest) {
-
-
         authService.registerUser(signupRequest);
-        return ResponseEntity.ok("User registered successfully!");
-
+        // Return a JSON response instead of a plain string
+        return ResponseEntity.ok(Map.of("message", "User registered successfully!"));
     }
 
 

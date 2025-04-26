@@ -38,7 +38,6 @@ public class QuizController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Quiz> createQuiz(@RequestBody Quiz quiz) {
         return ResponseEntity.ok(quizService.createQuiz(quiz));
     }
@@ -62,13 +61,13 @@ public class QuizController {
     }
 
     @PostMapping("/submit/{userQuizId}")
-    @PreAuthorize("hasRole('USER')")
+
     public ResponseEntity<UserQuiz> submitQuiz(@PathVariable String userQuizId, @RequestBody Map<String, String> answers) {
         return ResponseEntity.ok(quizService.submitQuiz(userQuizId, answers));
     }
 
     @GetMapping("/user/{userId}")
-    @PreAuthorize("hasRole('USER')")
+
     public ResponseEntity<List<UserQuiz>> getUserQuizzes(@PathVariable String userId) {
         return ResponseEntity.ok(quizService.getUserQuizzes(userId));
     }
