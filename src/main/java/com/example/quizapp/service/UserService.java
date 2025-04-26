@@ -1,24 +1,20 @@
 package com.example.quizapp.service;
 
-
 import com.example.quizapp.model.User;
 import com.example.quizapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import static org.springframework.security.core.context.SecurityContextHolder.getContext;
 
 @Service
 public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder encoder;
-
     public User getCurrentUser() {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails)getContext().getAuthentication().getPrincipal();
         return userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
@@ -47,11 +43,11 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (!encoder.matches(currentPassword, user.getPassword())) {
+        if (!currentPassword.equals(user.getPassword())) {
             throw new RuntimeException("Current password is incorrect");
         }
 
-        user.setPassword(encoder.encode(newPassword));
+        user.setPassword(newPassword);
         userRepository.save(user);
     }
 }

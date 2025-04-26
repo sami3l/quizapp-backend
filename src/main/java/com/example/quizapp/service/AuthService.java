@@ -10,7 +10,6 @@ import com.example.quizapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -27,9 +26,6 @@ public class AuthService {
     private RoleRepository roleRepository;
 
     @Autowired
-    private PasswordEncoder encoder;
-
-    @Autowired
     private EmailService emailService;
 
     public Map<String, Object> authenticateUser(LoginRequest loginRequest) {
@@ -37,14 +33,14 @@ public class AuthService {
         // Replace this with database check or mock as needed
         Map<String, Object> response = new HashMap<>();
         response.put("id", 1); // Dummy ID
-        response.put("username", loginRequest.getEmail().split("@")[0]); // Dummy username
-        response.put("email", loginRequest.getEmail());
-        response.put("password" , loginRequest.getPassword());
+        response.put("username", loginRequest.getUsername()); // Just use the username directly
+        // If you still want to include email in the response but don't have it, you could either:
+        response.put("email", loginRequest.getUsername() + "@example.com"); // Generate a dummy email if needed
+        // Or simply not include email in the response
         response.put("roles", List.of("USER")); // Default role
 
         return response;
     }
-
 
     public User registerUser(SignupRequest signupRequest) {
         if (userRepository.existsByUsername(signupRequest.getUsername())) {

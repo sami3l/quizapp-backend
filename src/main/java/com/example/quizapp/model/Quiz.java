@@ -24,3 +24,4 @@ public class Quiz {
     private String difficulty;
     private List<Question> questions = new ArrayList<>();
 }
+
